@@ -8,7 +8,7 @@ run_biome_fix() {
   fi
 
   echo "Running biome:fix-unsafe in $dir..."
-  (cd "$dir" && pnpm biome:fix-unsafe)
+  (cd "$dir" && npm run biome:fix-unsafe)
 
   git diff --quiet -- "$dir/" || git add "$dir/"
 }
