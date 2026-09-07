@@ -4,25 +4,24 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "tsc && node dist/index.js",
+    "start": "tsx src/index.ts",
     "biome:fix-unsafe": "biome format --write --css-parse-tailwind-directives=true && biome lint --write --css-parse-tailwind-directives=true && biome check --write --unsafe"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "^11.2.2",
-      "onFail": "download"
-    }
-  },
   "type": "module",
   "devDependencies": {
     "@biomejs/biome": "^2.5.12",
     "@types/node": "^26.4.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.23.13",
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^1.0.8",
+    "dotenv": "^17.4.2",
+    "pathe": "^2.0.3",
+    "uuid": "^14.0.2"
   }
 }
