@@ -12,7 +12,7 @@ export async function processQueueMessage(queueItem: QueuedImageJob, context: In
   context.log(`Starting image creation for ${queueItem.stationid} ${queueItem.stationname} (job ${queueItem.jobId})`);
 
   const image = await getRandomImage();
-  const processedImage = await generateWeatherImage(image.urls.regular, queueItem);
+  const processedImage = await generateWeatherImage(image, queueItem);
 
   uploadWeatherImage(queueItem.jobId, queueItem.stationid, processedImage);
 }

@@ -36,8 +36,8 @@ function formatWeatherLines(station: StationMeasurement): string[] {
   return lines;
 }
 
-export async function generateWeatherImage(imageUrl: string, station: StationMeasurement): Promise<Buffer> {
-  const image = await loadImage(imageUrl);
+export async function generateWeatherImage(suppliedImage: Buffer, station: StationMeasurement): Promise<Buffer> {
+  const image = await loadImage(suppliedImage);
   const canvas = createCanvas(image.width, image.height);
   const ctx = canvas.getContext('2d');
 
