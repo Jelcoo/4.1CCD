@@ -7,7 +7,7 @@ export const weatherRouter = Router();
 
 weatherRouter.get('/generate', async (_req, res) => {
   const jobId = uuidv7();
-  await queueMessage(JSON.stringify({ id: jobId }));
+  await queueMessage(jobId);
 
   res.status(200).json({ status: 'success', jobId: jobId });
 });

@@ -1,0 +1,32 @@
+{
+  "name": "queue-listener",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/src/functions/*.js",
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "watch": "tsc -w & tsc-alias -w",
+    "clean": "rimraf dist",
+    "prestart": "npm run clean && npm run build",
+    "start": "func start",
+    "start:verbose": "npm run start -- --verbose",
+    "biome:fix-unsafe": "biome format --write --css-parse-tailwind-directives=true && biome lint --write --css-parse-tailwind-directives=true && biome check --write --unsafe"
+  },
+  "dependencies": {
+    "@azure/data-tables": "^13.3.2",
+    "@azure/functions": "^4.0.0",
+    "@azure/storage-blob": "^12.33.0",
+    "@azure/storage-queue": "^12.31.0",
+    "@napi-rs/canvas": "^1.0.8",
+    "dotenv": "^17.4.2",
+    "pathe": "^2.0.3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.12",
+    "@types/node": "18.x",
+    "azure-functions-core-tools": "^4.14.0",
+    "rimraf": "^5.0.0",
+    "tsc-alias": "^1.9.4",
+    "typescript": "^5.0.0"
+  }
+}

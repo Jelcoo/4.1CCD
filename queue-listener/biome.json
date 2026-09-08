@@ -51,7 +51,6 @@
         "noUnusedPrivateClassMembers": "error",
         "noUnusedImports": "warn",
         "noUnusedVariables": "error",
-        "useImportExtensions": "error",
         "useIsNan": "error",
         "useValidForDirection": "error",
         "useValidTypeof": "error",

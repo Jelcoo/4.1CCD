@@ -1,3 +1,5 @@
+import { StationMeasurement } from '@/types/buienradar';
+
 export type JobStatus = 'Queued' | 'Running' | 'Completed' | 'Failed';
 
 export interface JobRecord {
@@ -7,4 +9,8 @@ export interface JobRecord {
   createdAt: string;
   resultUrls?: string[];
   error?: string;
+}
+
+export interface QueuedImageJob extends StationMeasurement {
+  jobId: string;
 }

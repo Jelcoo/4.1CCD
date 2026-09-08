@@ -14,4 +14,4 @@ run_biome_fix() {
 }
 
 run_biome_fix api
-run_biome_fix worker
+run_biome_fix queue_listener

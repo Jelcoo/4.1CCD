@@ -22,9 +22,9 @@ services:
     depends_on:
       - azurite
 
-  generation-queue-listener:
+  queue-listener:
     build:
-      context: ./generation-queue-listener
+      context: queue-listener
       dockerfile: Dockerfile
     env_file:
       - .env

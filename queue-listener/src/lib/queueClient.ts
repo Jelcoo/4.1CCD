@@ -1,7 +1,7 @@
 import { QueueSendMessageResponse } from '@azure/storage-queue';
-import { getQueueClient } from '@/lib/azureClients.ts';
+import { getQueueClient } from '@/lib/azureClients';
 
-const queueName = process.env.GENERATION_QUEUE_NAME ?? '';
+const queueName = process.env.IMAGE_QUEUE_NAME ?? '';
 
 const queueClient = getQueueClient(queueName);
 
