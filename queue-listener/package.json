@@ -23,10 +23,10 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.12",
-    "@types/node": "18.x",
+    "@types/node": "^26.5.0",
     "azure-functions-core-tools": "^4.14.0",
     "rimraf": "^5.0.0",
     "tsc-alias": "^1.9.4",
-    "typescript": "^5.0.0"
+    "typescript": "^7.0.2"
   }
 }

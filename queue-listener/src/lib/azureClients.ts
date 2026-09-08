@@ -21,7 +21,7 @@ export function getQueueClient(queueName: string): QueueClient {
 }
 
 export function getBlobClient(): BlobServiceClient {
-  return new BlobServiceClient(connectionString);
+  return BlobServiceClient.fromConnectionString(connectionString);
 }
 
 export function getContainerClient(containerName: string): ContainerClient {

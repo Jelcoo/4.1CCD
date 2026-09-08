@@ -1,17 +1,19 @@
-FROM node:24-alpine AS base
+FROM node:26-bookworm-slim AS build
 WORKDIR /app
-
-FROM base AS deps
 COPY package.json package-lock.json ./
-RUN npm ci
-
-FROM base AS runtime
-ENV NODE_ENV=production
-
-RUN apk add --no-cache icu-libs gcompat libstdc++
-
-COPY --from=deps /app/node_modules ./node_modules
-COPY package.json tsconfig.json host.json local.settings.json ./
+RUN npm ci --ignore-scripts
+COPY tsconfig.json ./
 COPY src ./src
+RUN npm run build
 
-CMD ["npm", "run", "start:verbose"]
+FROM node:26-bookworm-slim AS prod-deps
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev --ignore-scripts
+
+FROM mcr.microsoft.com/azure-functions/node:4-node22
+ENV AzureFunctionsJobHost__Logging__Console__IsEnabled=true
+WORKDIR /home/site/wwwroot
+COPY --from=prod-deps /app/node_modules ./node_modules
+COPY --from=build /app/dist ./dist
+COPY host.json package.json ./
