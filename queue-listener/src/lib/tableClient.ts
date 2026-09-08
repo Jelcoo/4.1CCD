@@ -1,6 +1,6 @@
-import { TableEntity } from '@azure/data-tables';
-import { getTableClient } from '@/lib/azureClients';
-import { JobRecord } from '@/types/types';
+import {TableEntity} from '@azure/data-tables';
+import {getTableClient} from '@/lib/azureClients';
+import {JobRecord} from '@/types/types';
 
 const tableName = process.env.WEATHER_TABLE_NAME ?? '';
 const partitionKey = 'job';
@@ -22,16 +22,7 @@ export async function createJobRecord(id: string, expectedStationCount: number):
 
 export async function getJobRecord(id: string): Promise<JobRecord | null> {
   try {
-    // Table Storage can't hold arrays, so resultUrls is persisted as a JSON string.
-    const entity = await tableClient.getEntity<Omit<JobRecord, 'resultUrls'> & { resultUrls?: string }>(
-      partitionKey,
-      id,
-    );
-
-    return {
-      ...entity,
-      resultUrls: entity.resultUrls ? (JSON.parse(entity.resultUrls) as string[]) : undefined,
-    };
+      return await tableClient.getEntity<JobRecord>(partitionKey, id);
   } catch (_err) {
     return null;
   }
@@ -48,13 +39,12 @@ export async function markJobRunning(id: string): Promise<void> {
   );
 }
 
-export async function markJobCompleted(id: string, resultUrls: string[]): Promise<void> {
+export async function markJobCompleted(id: string): Promise<void> {
   await tableClient.updateEntity(
     {
       partitionKey,
       rowKey: id,
       status: 'Completed',
-      resultUrls: JSON.stringify(resultUrls),
     },
     'Merge',
   );

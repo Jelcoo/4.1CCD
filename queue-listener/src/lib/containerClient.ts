@@ -14,16 +14,14 @@ export async function uploadWeatherImage(jobId: string, stationId: number, data:
   return blockBlobClient.url;
 }
 
-export async function getWeatherImages(jobId: string): Promise<string[]> {
-  const blobs = containerClient.listBlobsByHierarchy('/', { prefix: jobId });
-  const blobUrls = [];
+export async function getWeatherImagesCount(jobId: string): Promise<number> {
+  let count = 0;
 
-  for await (const blob of blobs) {
-    if (blob.kind === 'blob') {
-      const url = join(jobId, blob.name);
-      blobUrls.push(url);
+  for await (const item of containerClient.listBlobsByHierarchy("/", { prefix: `${jobId}/` })) {
+    if (item.kind === "blob") {
+      count++;
     }
   }
 
-  return blobUrls;
+  return count;
 }

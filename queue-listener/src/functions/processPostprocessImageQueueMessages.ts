@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import * as process from 'node:process';
 import { app, InvocationContext } from '@azure/functions';
-import { getWeatherImages } from '@/lib/containerClient';
+import { getWeatherImagesCount } from '@/lib/containerClient';
 import { getJobRecord, markJobCompleted } from '@/lib/tableClient';
 
 const postprocessImageQueueName = process.env.POSTPROCESS_IMAGE_QUEUE_NAME ?? '';
@@ -15,13 +15,13 @@ export async function processQueueMessage(queueItem: string, context: Invocation
     return;
   }
 
-  const imageUrls = await getWeatherImages(jobRecord.id);
+  const weatherImagesCount = await getWeatherImagesCount(jobRecord.id);
 
-  if (imageUrls.length <= jobRecord.expectedStationCount) {
+  if (weatherImagesCount < jobRecord.expectedStationCount) {
     return;
   }
 
-  await markJobCompleted(jobRecord.id, imageUrls);
+  await markJobCompleted(jobRecord.id);
 }
 
 app.storageQueue('processPostprocessImageQueueMessages', {
