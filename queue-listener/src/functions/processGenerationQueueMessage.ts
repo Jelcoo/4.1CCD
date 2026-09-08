@@ -6,7 +6,8 @@ import { queueMessage } from '@/lib/queueClient';
 import { createJobRecord } from '@/lib/tableClient';
 import { QueuedImageJob } from '@/types/types';
 
-const queueName = process.env.GENERATION_QUEUE_NAME ?? '';
+const generationQueueName = process.env.GENERATION_QUEUE_NAME ?? '';
+const imageQueueName = process.env.IMAGE_QUEUE_NAME ?? '';
 
 export async function processQueueMessage(queueItem: string, context: InvocationContext): Promise<void> {
   context.log(`Processing queue message: ${queueItem}`);
@@ -24,12 +25,12 @@ export async function processQueueMessage(queueItem: string, context: Invocation
       jobId: queueItem,
     };
 
-    await queueMessage(JSON.stringify(message));
+    await queueMessage(imageQueueName, JSON.stringify(message));
   }
 }
 
 app.storageQueue('processGenerationQueueMessage', {
-  queueName,
+  queueName: generationQueueName,
   connection: 'AzureWebJobsStorage',
   handler: processQueueMessage,
 });

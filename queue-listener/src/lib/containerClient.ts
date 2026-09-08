@@ -13,3 +13,17 @@ export async function uploadWeatherImage(jobId: string, stationId: number, data:
 
   return blockBlobClient.url;
 }
+
+export async function getWeatherImages(jobId: string): Promise<string[]> {
+  const blobs = containerClient.listBlobsByHierarchy('/', { prefix: jobId });
+  const blobUrls = [];
+
+  for await (const blob of blobs) {
+    if (blob.kind === 'blob') {
+      const url = join(jobId, blob.name);
+      blobUrls.push(url);
+    }
+  }
+
+  return blobUrls;
+}

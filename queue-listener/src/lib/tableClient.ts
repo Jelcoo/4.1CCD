@@ -19,3 +19,43 @@ export async function createJobRecord(id: string, expectedStationCount: number):
 
   await tableClient.createEntity(record);
 }
+
+export async function getJobRecord(id: string): Promise<JobRecord | null> {
+  try {
+    // Table Storage can't hold arrays, so resultUrls is persisted as a JSON string.
+    const entity = await tableClient.getEntity<Omit<JobRecord, 'resultUrls'> & { resultUrls?: string }>(
+      partitionKey,
+      id,
+    );
+
+    return {
+      ...entity,
+      resultUrls: entity.resultUrls ? (JSON.parse(entity.resultUrls) as string[]) : undefined,
+    };
+  } catch (_err) {
+    return null;
+  }
+}
+
+export async function markJobRunning(id: string): Promise<void> {
+  await tableClient.updateEntity(
+    {
+      partitionKey,
+      rowKey: id,
+      status: 'Running',
+    },
+    'Merge',
+  );
+}
+
+export async function markJobCompleted(id: string, resultUrls: string[]): Promise<void> {
+  await tableClient.updateEntity(
+    {
+      partitionKey,
+      rowKey: id,
+      status: 'Completed',
+      resultUrls: JSON.stringify(resultUrls),
+    },
+    'Merge',
+  );
+}
