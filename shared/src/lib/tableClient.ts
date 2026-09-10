@@ -1,6 +1,6 @@
-import {TableEntity} from '@azure/data-tables';
-import {getTableClient} from '@/lib/azureClients';
-import {JobRecord} from '@/types/types';
+import { TableEntity } from '@azure/data-tables';
+import { JobRecord } from '../types/types';
+import { getTableClient } from './azureClients';
 
 const tableName = process.env.WEATHER_TABLE_NAME ?? '';
 const partitionKey = 'job';
@@ -22,7 +22,7 @@ export async function createJobRecord(id: string, expectedStationCount: number):
 
 export async function getJobRecord(id: string): Promise<JobRecord | null> {
   try {
-      return await tableClient.getEntity<JobRecord>(partitionKey, id);
+    return await tableClient.getEntity<JobRecord>(partitionKey, id);
   } catch (_err) {
     return null;
   }

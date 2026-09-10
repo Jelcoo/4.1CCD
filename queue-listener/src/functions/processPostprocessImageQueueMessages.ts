@@ -1,8 +1,8 @@
 import 'dotenv/config';
 import * as process from 'node:process';
 import { app, InvocationContext } from '@azure/functions';
-import { getWeatherImagesCount } from '@/lib/containerClient';
-import { getJobRecord, markJobCompleted } from '@/lib/tableClient';
+import { getWeatherImagesCount } from 'shared/lib/containerClient';
+import { getJobRecord, markJobCompleted } from 'shared/lib/tableClient';
 
 const postprocessImageQueueName = process.env.POSTPROCESS_IMAGE_QUEUE_NAME ?? '';
 

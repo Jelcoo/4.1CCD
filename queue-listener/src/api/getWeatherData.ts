@@ -1,4 +1,4 @@
-import type { BuienradarFeed } from '@/types/buienradar.ts';
+import type { BuienradarFeed } from 'shared/types/buienradar';
 
 const BUIENRADAR_URL = 'https://data.buienradar.nl/2.0/feed/json';
 

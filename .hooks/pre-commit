@@ -14,4 +14,5 @@ run_biome_fix() {
 }
 
 run_biome_fix api
-run_biome_fix queue_listener
+run_biome_fix queue-listener
+run_biome_fix shared

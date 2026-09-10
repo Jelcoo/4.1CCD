@@ -11,5 +11,10 @@
       "@/*": ["./src/*"]
     },
     "types": ["node"]
-  }
+  },
+  "references": [
+    {
+      "path": "../shared"
+    }
+  ]
 }

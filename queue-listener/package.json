@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/src/functions/*.js",
   "scripts": {
-    "build": "tsc && tsc-alias",
+    "build": "tsc -b && tsc-alias",
     "watch": "tsc -w & tsc-alias -w",
     "clean": "rimraf dist",
     "prestart": "npm run clean && npm run build",
@@ -19,7 +19,8 @@
     "@azure/storage-queue": "^12.31.0",
     "@napi-rs/canvas": "^1.0.8",
     "dotenv": "^17.4.2",
-    "pathe": "^2.0.3"
+    "pathe": "^2.0.3",
+    "shared": "file:../shared"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.12",

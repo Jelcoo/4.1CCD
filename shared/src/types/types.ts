@@ -1,4 +1,4 @@
-import { StationMeasurement } from '@/types/buienradar';
+import { StationMeasurement } from './buienradar';
 
 export type JobStatus = 'Queued' | 'Running' | 'Completed' | 'Failed';
 

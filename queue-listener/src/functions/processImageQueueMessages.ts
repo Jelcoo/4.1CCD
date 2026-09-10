@@ -1,12 +1,12 @@
 import 'dotenv/config';
 import * as process from 'node:process';
 import { app, InvocationContext } from '@azure/functions';
+import { uploadWeatherImage } from 'shared/lib/containerClient';
+import { queueMessage } from 'shared/lib/queueClient';
+import { getJobRecord, markJobRunning } from 'shared/lib/tableClient';
+import { QueuedImageJob } from 'shared/types/types';
 import { getRandomImage } from '@/api/getRandomImage';
-import { uploadWeatherImage } from '@/lib/containerClient';
 import { generateWeatherImage } from '@/lib/imageGenerator';
-import { queueMessage } from '@/lib/queueClient';
-import { getJobRecord, markJobRunning } from '@/lib/tableClient';
-import { QueuedImageJob } from '@/types/types';
 
 const imageQueueName = process.env.IMAGE_QUEUE_NAME ?? '';
 const postprocessImageQueueName = process.env.POSTPROCESS_IMAGE_QUEUE_NAME ?? '';

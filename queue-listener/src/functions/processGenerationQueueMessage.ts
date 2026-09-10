@@ -1,10 +1,10 @@
 import 'dotenv/config';
 import * as process from 'node:process';
 import { app, InvocationContext } from '@azure/functions';
+import { queueMessage } from 'shared/lib/queueClient';
+import { createJobRecord } from 'shared/lib/tableClient';
+import { QueuedImageJob } from 'shared/types/types';
 import { getWeatherData } from '@/api/getWeatherData';
-import { queueMessage } from '@/lib/queueClient';
-import { createJobRecord } from '@/lib/tableClient';
-import { QueuedImageJob } from '@/types/types';
 
 const generationQueueName = process.env.GENERATION_QUEUE_NAME ?? '';
 const imageQueueName = process.env.IMAGE_QUEUE_NAME ?? '';

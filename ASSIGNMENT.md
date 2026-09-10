@@ -27,8 +27,8 @@ Allowed queueing services:
 - [x] Employ Queue Storage to create and read (+ delete) messages from the queue.
 - [x] Employ Buienrader api to get weather station data [https://data.buienradar.nl/2.0/feed/json](https://data.buienradar.nl/2.0/feed/json)
 - [x] Employ any public api for retrieving an image to write the weather data on. e.g. [https://unsplash.com/developers](https://unsplash.com/developers)
-- [ ] Expose a publicly accessible API for fetching the generated images.
-- [ ] Provide HTTP files as API documentation with working links to your API.
+- [x] Expose a publicly accessible API for fetching the generated images.
+- [x] Provide HTTP files as API documentation with working links to your API.
 - [ ] Create a fitting Bicep template (include the queues as well).
 - [ ] Add all files to GitHub repo and add Hijdra ([https://github.com/Hijdra](https://github.com/Hijdra)) or [mark.hijdra@wearetriple.com](mailto:mark.hijdra@wearetriple.com) to organization and project.
 - [ ] Create a deploy.ps1 script that publishes your code using the dotnet cli, creates the resources in azure using the Bicep template and deploys the function using the azure cli.
