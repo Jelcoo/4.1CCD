@@ -1,0 +1,12 @@
+**/node_modules
+**/dist
+**/*.tsbuildinfo
+
+.git
+.gitignore
+.idea
+.hooks
+.env
+*.md
+
+**/local.settings.json

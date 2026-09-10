@@ -11,8 +11,8 @@ services:
 
   api:
     build:
-      context: ./api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: api/Dockerfile
     ports:
       - "3000:3000"
     env_file:
@@ -24,8 +24,8 @@ services:
 
   queue-listener:
     build:
-      context: queue-listener
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: queue-listener/Dockerfile
     env_file:
       - .env
     environment:
