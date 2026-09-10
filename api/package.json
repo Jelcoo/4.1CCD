@@ -22,6 +22,8 @@
     "pathe": "^2.0.3",
     "pino": "^10.3.1",
     "pino-http": "^11.0.0",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1",
     "uuid": "^14.0.2"
   },
   "devDependencies": {
@@ -29,6 +31,8 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^26.5.0",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "tsx": "^4.23.13",
     "typescript": "^7.0.2"
   }

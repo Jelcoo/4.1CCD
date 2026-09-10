@@ -4,8 +4,10 @@ import express from 'express';
 import helmet from 'helmet';
 import pino from 'pino';
 import pinoHttp from 'pino-http';
+import swaggerUi from 'swagger-ui-express';
 import { healthRouter } from '@/routes/health.ts';
 import { weatherRouter } from '@/routes/weather.ts';
+import { swaggerSpec } from '@/swagger.ts';
 
 export const logger = pino({ level: process.env.LOG_LEVEL ?? 'info' });
 const app = express();
@@ -17,6 +19,7 @@ app.use(pinoHttp({ logger }));
 
 app.use('/health', healthRouter);
 app.use('/weather', weatherRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get('/', (_req, res) => {
   res.json({ service: 'api', status: 'ok' });
