@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import pino from 'pino';
 import pinoHttp from 'pino-http';
 import swaggerUi from 'swagger-ui-express';
+import { authMiddleware } from '@/middleware/auth.ts';
 import { healthRouter } from '@/routes/health.ts';
 import { weatherRouter } from '@/routes/weather.ts';
 import { swaggerSpec } from '@/swagger.ts';
@@ -18,7 +19,7 @@ app.use(express.json());
 app.use(pinoHttp({ logger }));
 
 app.use('/health', healthRouter);
-app.use('/weather', weatherRouter);
+app.use('/weather', authMiddleware, weatherRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get('/', (_req, res) => {
