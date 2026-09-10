@@ -1,4 +1,5 @@
 import { TableClient } from '@azure/data-tables';
+import { BlobServiceClient, ContainerClient } from '@azure/storage-blob';
 import { QueueClient } from '@azure/storage-queue';
 
 const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING ?? '';
@@ -17,4 +18,16 @@ export function getQueueClient(queueName: string): QueueClient {
   queueClient.createIfNotExists();
 
   return queueClient;
+}
+
+export function getBlobClient(): BlobServiceClient {
+  return BlobServiceClient.fromConnectionString(connectionString);
+}
+
+export function getContainerClient(containerName: string): ContainerClient {
+  const blobServiceClient = getBlobClient();
+  const containerClient = blobServiceClient.getContainerClient(containerName);
+  containerClient.createIfNotExists();
+
+  return containerClient;
 }

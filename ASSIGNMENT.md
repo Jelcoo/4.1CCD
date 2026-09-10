@@ -21,26 +21,26 @@ Allowed queueing services:
 
 ## Must
 
-- Expose publicly accessible API for requesting a set of fresh images with current weather data.
-- Employ queues to process the jobs in the background so the initial call stays fast.
-- Employ Blob Storage to store all generated images and to expose the files.
-- Employ Queue Storage to create and read (+ delete) messages from the queue.
-- Employ Buienrader api to get weather station data [https://data.buienradar.nl/2.0/feed/json](https://data.buienradar.nl/2.0/feed/json)
-- Employ any public api for retrieving an image to write the weather data on. e.g. [https://unsplash.com/developers](https://unsplash.com/developers)
-- Expose a publicly accessible API for fetching the generated images.
-- Provide HTTP files as API documentation with working links to your API.
-- Create a fitting Bicep template (include the queues as well).
-- Add all files to GitHub repo and add Hijdra ([https://github.com/Hijdra](https://github.com/Hijdra)) or [mark.hijdra@wearetriple.com](mailto:mark.hijdra@wearetriple.com) to organization and project.
-- Create a deploy.ps1 script that publishes your code using the dotnet cli, creates the resources in azure using the Bicep template and deploys the function using the azure cli.
-- Employ **multiple** queues, one for starting the job and one for fetching and updating an image.
-- Deploy the code to azure and have a working endpoint.
+- [x] Expose publicly accessible API for requesting a set of fresh images with current weather data.
+- [x] Employ queues to process the jobs in the background so the initial call stays fast.
+- [x] Employ Blob Storage to store all generated images and to expose the files.
+- [x] Employ Queue Storage to create and read (+ delete) messages from the queue.
+- [x] Employ Buienrader api to get weather station data [https://data.buienradar.nl/2.0/feed/json](https://data.buienradar.nl/2.0/feed/json)
+- [x] Employ any public api for retrieving an image to write the weather data on. e.g. [https://unsplash.com/developers](https://unsplash.com/developers)
+- [ ] Expose a publicly accessible API for fetching the generated images.
+- [ ] Provide HTTP files as API documentation with working links to your API.
+- [ ] Create a fitting Bicep template (include the queues as well).
+- [ ] Add all files to GitHub repo and add Hijdra ([https://github.com/Hijdra](https://github.com/Hijdra)) or [mark.hijdra@wearetriple.com](mailto:mark.hijdra@wearetriple.com) to organization and project.
+- [ ] Create a deploy.ps1 script that publishes your code using the dotnet cli, creates the resources in azure using the Bicep template and deploys the function using the azure cli.
+- [x] Employ **multiple** queues, one for starting the job and one for fetching and updating an image.
+- [ ] Deploy the code to azure and have a working endpoint.
 
 ## Could
 
-- Use SAS token instead of publicly accessible blob storage for fetching finished image directly from Blob.
-- Build and deploy the code automatically from GitHub.
-- Use authentication on request API. (Be sure to provide me with credentials)
-- Provide a status endpoint for fetching progress status and saving status in Table.
+- [x] Use SAS token instead of publicly accessible blob storage for fetching finished image directly from Blob.
+- [ ] Build and deploy the code automatically from GitHub.
+- [ ] Use authentication on request API. (Be sure to provide me with credentials)
+- [x] Provide a status endpoint for fetching progress status and saving status in Table.
 
 Having all **Must** requirements will result in a minimal passing grade, also having **Could** requirements results in a higher grade.
 

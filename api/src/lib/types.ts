@@ -5,6 +5,5 @@ export interface JobRecord {
   status: JobStatus;
   expectedStationCount: number;
   createdAt: string;
-  resultUrls?: string[];
   error?: string;
 }

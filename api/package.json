@@ -13,11 +13,13 @@
   "type": "module",
   "dependencies": {
     "@azure/data-tables": "^13.3.2",
+    "@azure/storage-blob": "^12.33.0",
     "@azure/storage-queue": "^12.31.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "helmet": "^8.3.0",
+    "pathe": "^2.0.3",
     "pino": "^10.3.1",
     "pino-http": "^11.0.0",
     "uuid": "^14.0.2"
