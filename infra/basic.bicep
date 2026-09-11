@@ -5,7 +5,7 @@ param weatherTableName string
 param imageContainerName string
 param targetPort int
 
-var environmentName = 'inh-ccd-weather-app-710535'
+var environmentName = 'weatherapp710535'
 
 module storageAccount './storageAccount.bicep' = {
     name: 'storageAccountDeployment'
@@ -47,10 +47,18 @@ module containerRegistry './containerRegistry.bicep' = {
     }
 }
 
+module containerAppsEnvironment './containerAppsEnvironment.bicep' = {
+    name: 'containerAppsEnvironmentDeployment'
+    params: {
+        environmentName: environmentName
+    }
+}
+
 module apiContainer './apiContainer.bicep' = {
     name: 'apiContainerDeployment'
     params: {
         environmentName: environmentName
+        environmentId: containerAppsEnvironment.outputs.id
         acrName: containerRegistry.outputs.name
         pullIdentityName: containerRegistry.outputs.pullIdentityName
         storageAccountName: storageAccount.outputs.storageAccountName
@@ -62,6 +70,19 @@ module queueWorker './queueWorker.bicep' = {
     name: 'queueWorkerDeployment'
     params: {
         environmentName: environmentName
+        environmentId: containerAppsEnvironment.outputs.id
+        acrName: containerRegistry.outputs.name
+        pullIdentityName: containerRegistry.outputs.pullIdentityName
         storageAccountName: storageAccount.outputs.storageAccountName
+        weatherTableName: weatherTableName
+        imageContainerName: imageContainerName
+        generationQueueName: generationQueueName
+        imageQueueName: imageQueueName
+        postprocessImageQueueName: postprocessImageQueueName
     }
+    dependsOn: [
+        tableStorage
+        blobStorage
+        queueStorage
+    ]
 }

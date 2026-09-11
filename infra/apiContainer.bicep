@@ -1,5 +1,6 @@
 param location string = resourceGroup().location
 param environmentName string
+param environmentId string
 param acrName string
 param pullIdentityName string
 param storageAccountName string
@@ -13,10 +14,6 @@ var blobDataReaderRoleId = subscriptionResourceId(
   'Microsoft.Authorization/roleDefinitions',
   '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1'
 ) // Storage Blob Data Reader
-
-resource managedEnvironment 'Microsoft.App/managedEnvironments@2024-03-01' existing = {
-  name: environmentName
-}
 
 resource registry 'Microsoft.ContainerRegistry/registries@2023-07-01' existing = {
   name: acrName
@@ -41,7 +38,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
     }
   }
   properties: {
-    managedEnvironmentId: managedEnvironment.id
+    managedEnvironmentId: environmentId
     configuration: {
       ingress: {
         external: true

@@ -1,9 +1,27 @@
 param location string = resourceGroup().location
 param environmentName string
+param environmentId string
+param acrName string
+param pullIdentityName string
 param storageAccountName string
+param weatherTableName string
+param imageContainerName string
+param generationQueueName string
+param imageQueueName string
+param postprocessImageQueueName string
 
-var farmName = '${environmentName}-serverfarm'
-var functionName = '${environmentName}-function'
+var appName = '${environmentName}-worker'
+var imageRepository = 'queue-listener'
+var imageTag = 'latest'
+var queueScaleThreshold = 5
+
+resource registry 'Microsoft.ContainerRegistry/registries@2023-07-01' existing = {
+  name: acrName
+}
+
+resource pullIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
+  name: pullIdentityName
+}
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing = {
   name: storageAccountName
@@ -11,68 +29,126 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing 
 
 var storageAccountConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value};EndpointSuffix=core.windows.net'
 
-resource serverFarm 'Microsoft.Web/serverfarms@2021-03-01' = {
-  name: farmName
-  location: location
-  tags: resourceGroup().tags
-  sku: {
-    tier: 'Consumption'
-    name: 'Y1'
-  }
-  kind: 'elastic'
-}
-
-resource queueWorker 'Microsoft.Web/sites@2021-03-01' = {
-  name: functionName
+resource queueWorker 'Microsoft.App/containerApps@2024-03-01' = {
+  name: appName
   location: location
   tags: resourceGroup().tags
   identity: {
-    type: 'SystemAssigned'
+    type: 'SystemAssigned,UserAssigned'
+    userAssignedIdentities: {
+      '${pullIdentity.id}': {}
+    }
   }
-  kind: 'functionapp'
   properties: {
-    enabled: true
-    serverFarmId: serverFarm.id
-    siteConfig: {
-      netFrameworkVersion: 'v8.0'
-      minTlsVersion: '1.2'
-      autoHealEnabled: true
-      autoHealRules: {
-        triggers: {
-          privateBytesInKB: 0
-          statusCodes: [
+    managedEnvironmentId: environmentId
+    configuration: {
+      registries: [
+        {
+          server: registry.properties.loginServer
+          identity: pullIdentity.id
+        }
+      ]
+      secrets: [
+        {
+          name: 'storage-connection-string'
+          value: storageAccountConnectionString
+        }
+      ]
+    }
+    template: {
+      containers: [
+        {
+          name: 'queue-listener'
+          image: '${registry.properties.loginServer}/${imageRepository}:${imageTag}'
+          env: [
             {
-              status: 500
-              subStatus: 0
-              win32Status: 0
-              count: 25
-              timeInterval: '00:05:00'
+              name: 'FUNCTIONS_EXTENSION_VERSION'
+              value: '~4'
+            }
+            {
+              name: 'FUNCTIONS_WORKER_RUNTIME'
+              value: 'node'
+            }
+            {
+              name: 'AzureWebJobsStorage'
+              secretRef: 'storage-connection-string'
+            }
+            {
+              name: 'AZURE_STORAGE_CONNECTION_STRING'
+              secretRef: 'storage-connection-string'
+            }
+            {
+              name: 'WEATHER_TABLE_NAME'
+              value: weatherTableName
+            }
+            {
+              name: 'IMAGE_CONTAINER_NAME'
+              value: imageContainerName
+            }
+            {
+              name: 'GENERATION_QUEUE_NAME'
+              value: generationQueueName
+            }
+            {
+              name: 'IMAGE_QUEUE_NAME'
+              value: imageQueueName
+            }
+            {
+              name: 'POSTPROCESS_IMAGE_QUEUE_NAME'
+              value: postprocessImageQueueName
             }
           ]
+          resources: {
+            cpu: json('0.5')
+            memory: '1Gi'
+          }
         }
-        actions: {
-          actionType: 'Recycle'
-          minProcessExecutionTime: '00:01:00'
-        }
+      ]
+      scale: {
+        minReplicas: 0
+        maxReplicas: 5
+        rules: [
+          {
+            name: 'generation-queue-scale-rule'
+            azureQueue: {
+              queueName: generationQueueName
+              queueLength: queueScaleThreshold
+              auth: [
+                {
+                  secretRef: 'storage-connection-string'
+                  triggerParameter: 'connection'
+                }
+              ]
+            }
+          }
+          {
+            name: 'image-queue-scale-rule'
+            azureQueue: {
+              queueName: imageQueueName
+              queueLength: queueScaleThreshold
+              auth: [
+                {
+                  secretRef: 'storage-connection-string'
+                  triggerParameter: 'connection'
+                }
+              ]
+            }
+          }
+          {
+            name: 'postprocess-image-queue-scale-rule'
+            azureQueue: {
+              queueName: postprocessImageQueueName
+              queueLength: queueScaleThreshold
+              auth: [
+                {
+                  secretRef: 'storage-connection-string'
+                  triggerParameter: 'connection'
+                }
+              ]
+            }
+          }
+        ]
       }
-      scmIpSecurityRestrictionsUseMain: false
-      scmMinTlsVersion: '1.2'
-      loadBalancing: 'PerSiteRoundRobin'
-      http20Enabled: true
     }
-    clientAffinityEnabled: false
-    httpsOnly: true
-    containerSize: 1536
-    redundancyMode: 'None'
-  }
-
-  resource functionAppConfig 'config@2021-03-01' = {
-    name: 'appsettings'
-    properties: {
-        FUNCTIONS_EXTENSION_VERSION: '~4'
-        FUNCTIONS_WORKER_RUNTIME: 'node'
-        WEBSITE_NODE_DEFAULT_VERSION: '26'
-        AzureWebJobsStorage: storageAccountConnectionString
-      }
   }
 }
