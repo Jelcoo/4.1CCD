@@ -39,7 +39,7 @@ Allowed queueing services:
 
 - [x] Use SAS token instead of publicly accessible blob storage for fetching finished image directly from Blob.
 - [ ] Build and deploy the code automatically from GitHub.
-- [ ] Use authentication on request API. (Be sure to provide me with credentials)
+- [x] Use authentication on request API. (Be sure to provide me with credentials)
 - [x] Provide a status endpoint for fetching progress status and saving status in Table.
 
 Having all **Must** requirements will result in a minimal passing grade, also having **Could** requirements results in a higher grade.
