@@ -5,8 +5,15 @@ param acrName string
 param pullIdentityName string
 param storageAccountName string
 param targetPort int
+param weatherTableName string
+param imageContainerName string
+param generationQueueName string
+param imageQueueName string
+param postprocessImageQueueName string
+@secure()
+param apiAccessToken string
 
-var appName = '${environmentName}-api'
+var appName = '${environmentName}api'
 var imageRepository = 'weather-api'
 var imageTag = 'latest'
 
@@ -26,6 +33,8 @@ resource pullIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing = {
   name: storageAccountName
 }
+
+var storageAccountConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value};EndpointSuffix=core.windows.net'
 
 resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
   name: appName
@@ -51,6 +60,16 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
           identity: pullIdentity.id
         }
       ]
+      secrets: [
+        {
+          name: 'storage-connection-string'
+          value: storageAccountConnectionString
+        }
+        {
+          name: 'api-access-token'
+          value: apiAccessToken
+        }
+      ]
     }
     template: {
       containers: [
@@ -59,12 +78,32 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
           image: '${registry.properties.loginServer}/${imageRepository}:${imageTag}'
           env: [
             {
-              name: 'STORAGE_ACCOUNT_NAME'
-              value: storageAccountName
+              name: 'AZURE_STORAGE_CONNECTION_STRING'
+              secretRef: 'storage-connection-string'
             }
             {
-              name: 'BLOB_CONTAINER_NAME'
-              value: 'images'
+              name: 'ACCESS_TOKEN'
+              secretRef: 'api-access-token'
+            }
+            {
+              name: 'WEATHER_TABLE_NAME'
+              value: weatherTableName
+            }
+            {
+              name: 'IMAGE_CONTAINER_NAME'
+              value: imageContainerName
+            }
+            {
+              name: 'GENERATION_QUEUE_NAME'
+              value: generationQueueName
+            }
+            {
+              name: 'IMAGE_QUEUE_NAME'
+              value: imageQueueName
+            }
+            {
+              name: 'POSTPROCESS_IMAGE_QUEUE_NAME'
+              value: postprocessImageQueueName
             }
           ]
           resources: {
@@ -91,3 +130,4 @@ resource blobDataReader 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   }
 }
 
+output containerAppUrl string = containerApp.properties.configuration.ingress.fqdn

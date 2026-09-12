@@ -2,7 +2,7 @@ param location string = resourceGroup().location
 param environmentName string
 
 var acrName = '${environmentName}registry'
-var identityName = '${environmentName}-identity'
+var identityName = '${environmentName}identity'
 
 resource acrPullRole 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
   name: '7f951dda-4ed3-4680-a7ca-43fe172d538d' // AcrPull

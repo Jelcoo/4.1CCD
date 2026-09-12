@@ -21,26 +21,26 @@ Allowed queueing services:
 
 ## Must
 
-- [x] Expose publicly accessible API for requesting a set of fresh images with current weather data.
-- [x] Employ queues to process the jobs in the background so the initial call stays fast.
-- [x] Employ Blob Storage to store all generated images and to expose the files.
-- [x] Employ Queue Storage to create and read (+ delete) messages from the queue.
-- [x] Employ Buienrader api to get weather station data [https://data.buienradar.nl/2.0/feed/json](https://data.buienradar.nl/2.0/feed/json)
-- [x] Employ any public api for retrieving an image to write the weather data on. e.g. [https://unsplash.com/developers](https://unsplash.com/developers)
-- [x] Expose a publicly accessible API for fetching the generated images.
-- [x] Provide HTTP files as API documentation with working links to your API.
-- [ ] Create a fitting Bicep template (include the queues as well).
-- [ ] Add all files to GitHub repo and add Hijdra ([https://github.com/Hijdra](https://github.com/Hijdra)) or [mark.hijdra@wearetriple.com](mailto:mark.hijdra@wearetriple.com) to organization and project.
+- [X] Expose publicly accessible API for requesting a set of fresh images with current weather data.
+- [X] Employ queues to process the jobs in the background so the initial call stays fast.
+- [X] Employ Blob Storage to store all generated images and to expose the files.
+- [X] Employ Queue Storage to create and read (+ delete) messages from the queue.
+- [X] Employ Buienrader api to get weather station data [https://data.buienradar.nl/2.0/feed/json](https://data.buienradar.nl/2.0/feed/json)
+- [X] Employ any public api for retrieving an image to write the weather data on. e.g. [https://unsplash.com/developers](https://unsplash.com/developers)
+- [X] Expose a publicly accessible API for fetching the generated images.
+- [X] Provide HTTP files as API documentation with working links to your API.
+- [X] Create a fitting Bicep template (include the queues as well).
+- [X] Add all files to GitHub repo and add Hijdra ([https://github.com/Hijdra](https://github.com/Hijdra)) or [mark.hijdra@wearetriple.com](mailto:mark.hijdra@wearetriple.com) to organization and project.
 - [ ] Create a deploy.ps1 script that publishes your code using the dotnet cli, creates the resources in azure using the Bicep template and deploys the function using the azure cli.
-- [x] Employ **multiple** queues, one for starting the job and one for fetching and updating an image.
-- [ ] Deploy the code to azure and have a working endpoint.
+- [X] Employ **multiple** queues, one for starting the job and one for fetching and updating an image.
+- [X] Deploy the code to azure and have a working endpoint.
 
 ## Could
 
-- [x] Use SAS token instead of publicly accessible blob storage for fetching finished image directly from Blob.
+- [X] Use SAS token instead of publicly accessible blob storage for fetching finished image directly from Blob.
 - [ ] Build and deploy the code automatically from GitHub.
-- [x] Use authentication on request API. (Be sure to provide me with credentials)
-- [x] Provide a status endpoint for fetching progress status and saving status in Table.
+- [X] Use authentication on request API. (Be sure to provide me with credentials)
+- [X] Provide a status endpoint for fetching progress status and saving status in Table.
 
 Having all **Must** requirements will result in a minimal passing grade, also having **Could** requirements results in a higher grade.
 
@@ -54,4 +54,4 @@ Also include the following information:
 - Your name
 - Student number
 - Whether you've used AI or not
-    - This is allowed as long as you learn from the assignment
+  - This is allowed as long as you learn from the assignment

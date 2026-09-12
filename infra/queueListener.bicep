@@ -10,7 +10,7 @@ param generationQueueName string
 param imageQueueName string
 param postprocessImageQueueName string
 
-var appName = '${environmentName}-worker'
+var appName = '${environmentName}worker'
 var imageRepository = 'queue-listener'
 var imageTag = 'latest'
 var queueScaleThreshold = 5

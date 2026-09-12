@@ -1,11 +1,12 @@
+param environmentName string
 param generationQueueName string
 param imageQueueName string
 param postprocessImageQueueName string
 param weatherTableName string
 param imageContainerName string
 param targetPort int
-
-var environmentName = 'weatherapp710535'
+@secure()
+param apiAccessToken string
 
 module storageAccount './storageAccount.bicep' = {
     name: 'storageAccountDeployment'
@@ -63,11 +64,17 @@ module apiContainer './apiContainer.bicep' = {
         pullIdentityName: containerRegistry.outputs.pullIdentityName
         storageAccountName: storageAccount.outputs.storageAccountName
         targetPort: targetPort
+        weatherTableName: weatherTableName
+        imageContainerName: imageContainerName
+        generationQueueName: generationQueueName
+        imageQueueName: imageQueueName
+        postprocessImageQueueName: postprocessImageQueueName
+        apiAccessToken: apiAccessToken
     }
 }
 
-module queueWorker './queueWorker.bicep' = {
-    name: 'queueWorkerDeployment'
+module queueListener './queueListener.bicep' = {
+    name: 'queueListenerDeployment'
     params: {
         environmentName: environmentName
         environmentId: containerAppsEnvironment.outputs.id
@@ -86,3 +93,5 @@ module queueWorker './queueWorker.bicep' = {
         queueStorage
     ]
 }
+
+output apiContainerUrl string = apiContainer.outputs.containerAppUrl
