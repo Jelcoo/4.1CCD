@@ -2,7 +2,7 @@ import 'dotenv/config';
 import * as process from 'node:process';
 import { app, InvocationContext } from '@azure/functions';
 import { queueMessage } from 'shared/lib/queueClient';
-import { createJobRecord } from 'shared/lib/tableClient';
+import { updateExpectedJobStations } from 'shared/lib/tableClient';
 import { QueuedImageJob } from 'shared/types/types';
 import { getWeatherData } from '@/api/getWeatherData';
 
@@ -15,7 +15,9 @@ export async function processQueueMessage(queueItem: string, context: Invocation
   const weatherData = await getWeatherData();
   const stations = weatherData.actual.stationmeasurements;
 
-  createJobRecord(queueItem, stations.length).then(() => context.log(`Job record created for ${queueItem}`));
+  updateExpectedJobStations(queueItem, stations.length).then(() =>
+    context.log(`Expected stations for ${queueItem} set to ${stations.length}`),
+  );
 
   for (const station of stations) {
     context.log(`Queueing station ${station.stationid} ${station.stationname} for job ${queueItem}`);

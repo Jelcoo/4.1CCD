@@ -7,7 +7,6 @@ const options: swaggerJSDoc.OAS3Options = {
       title: 'Weather API',
       version: '1.0.0',
     },
-    servers: [{ url: 'http://localhost:3000' }],
     components: {
       securitySchemes: {
         bearerAuth: {

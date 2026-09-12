@@ -7,13 +7,12 @@ const partitionKey = 'job';
 
 const tableClient = getTableClient(tableName);
 
-export async function createJobRecord(id: string, expectedStationCount: number): Promise<void> {
+export async function createJobRecord(id: string): Promise<void> {
   const record: TableEntity<JobRecord> = {
     partitionKey,
     rowKey: id,
     id,
     status: 'Queued',
-    expectedStationCount,
     createdAt: new Date().toISOString(),
   };
 
@@ -26,6 +25,17 @@ export async function getJobRecord(id: string): Promise<JobRecord | null> {
   } catch (_err) {
     return null;
   }
+}
+
+export async function updateExpectedJobStations(id: string, expectedStationCount: number): Promise<void> {
+  await tableClient.updateEntity(
+    {
+      partitionKey,
+      rowKey: id,
+      expectedStationCount,
+    },
+    'Merge',
+  );
 }
 
 export async function markJobRunning(id: string): Promise<void> {

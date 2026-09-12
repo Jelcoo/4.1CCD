@@ -1,7 +1,7 @@
 import process from 'node:process';
 import { getSasUrl, getWeatherImages } from '@shared/lib/containerClient.ts';
 import { queueMessage } from '@shared/lib/queueClient.ts';
-import { getJobRecord } from '@shared/lib/tableClient.ts';
+import { createJobRecord, getJobRecord } from '@shared/lib/tableClient.ts';
 import { Router } from 'express';
 import { v7 as uuidv7 } from 'uuid';
 
@@ -62,6 +62,8 @@ const generationQueueName = process.env.GENERATION_QUEUE_NAME ?? '';
  */
 weatherRouter.get('/generate', async (_req, res) => {
   const jobId = uuidv7();
+
+  await createJobRecord(jobId);
   await queueMessage(generationQueueName, jobId);
 
   res.status(200).json({ status: 'success', jobId: jobId });
